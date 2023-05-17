@@ -1,40 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+<div class="displayBox">
+    <h3>Equipment</h3>
+    <ol>
+        <li *ngFor="let item of equipmentItems">
+            <button [class.active]="item.mass+cargoMass<=maximumAllowedMass && cargoHold.length < maxItems" [disabled]="item.mass+cargoMass>maximumAllowedMass || cargoHold.length >= maxItems" (click)="nearCapacity = addItem(item)">
+                Add to Cargo Hold
+            </button>
+            {{item.name}}, {{item.mass}} kg
+        </li>
+    </ol>
+</div>
 
-@Component({
-  selector: 'app-crew',
-  templateUrl: './crew.component.html',
-  styleUrls: ['./crew.component.css']
-})
-export class CrewComponent implements OnInit {
+<hr>
 
-  crew: object[] = [
-    {name: "Eileen Collins", firstMission: false},
-    {name: "Mae Jemison", firstMission: false},
-    {name: "Ellen Ochoa", firstMission: true}
-  ];
-  memberBeingEdited: object = null;
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
-  add(memberName: string, isFirst: boolean) {
-    this.crew.push({name: memberName, firstMission: isFirst});
-  }
-  
-  remove(member: object) {
-    let index = this.crew.indexOf(member);
-    this.crew.splice(index, 1);
-  }
-
-  edit(member: object) {
-    this.memberBeingEdited = member;
-  }
-
-  save(name: string, member: object) {
-    member['name'] = name;
-    this.memberBeingEdited = null;
-  }
-
-}
+<div class = "displayBox">
+    <h3>Cargo Hold: {{cargoHold.length}}/{{maxItems}} Spots Filled</h3>
+    <ol>
+        <li *ngFor="let equipment of cargoHold">{{equipment.name}}</li>
+    </ol>
+    <p>Mass in Hold: {{cargoMass}} kg</p>
+    <p [class.nearMaxMass]="nearCapacity">Mass Budget Remaining: {{maximumAllowedMass - cargoMass}} kg</p>
+    <button (click)="cargoHold=[]; cargoMass=0; nearCapacity = false">Empty Hold</button>
+</div>
